@@ -1,0 +1,100 @@
+#!/usr/bin/python
+import sys,getopt,subprocess
+
+def logappend():
+	global html
+	global show
+	global token
+	global type
+	global showrooms
+	global name
+	global verbose
+	global logfile
+	global verbose 
+	
+	options="java " 
+	
+	if verbose:
+		options +="-Ddebug=true "
+		
+	options +="-classpath classes loghandler.LogReader \"" 
+	
+	if html:
+		options+= "html=" + logfile 
+	if show==True:
+		options+= "show=true" 
+	if token:
+		options+= ",token=" + token
+	if name:
+		options+= ",name=" + name
+	if type:
+		options+= ",type=" + type
+	if showrooms:
+		options+= ",showrooms=" + showrooms
+	if logfile:
+		options+= ",file=" + logfile
+			
+	options+="\""
+	subprocess.call(options, shell=True)
+	
+def main(argv):
+	parseArgs(argv)
+	logappend()
+
+def validate():
+	None
+	
+def parseArgs(argv):
+	global html
+	global show
+	global token
+	global type
+	global showrooms
+	global name
+	global verbose
+	global logfile
+	
+	verbose=False
+	html=False
+	type=None
+	token=None
+	name=None
+	type=None
+	showrooms=False
+	logfile=None
+	show=False
+	
+	try:
+		opts,args = getopt.getopt(argv, "vHS:K:E:G:R:")
+	except getopt.GetoptError:
+		print "Usage: logread -K <token> [-H] -S <log>"
+		print "Usage: logread -K <token> [-H] -R (-E <name> | -G <name>) <log>"
+		
+	for opt, arg in opts:
+		if opt == "-H":
+			html=arg
+		elif opt == "-K":
+			token=arg
+		elif opt == "-S":
+			show=True
+		elif opt == "-E":
+			name=arg
+			type="E"
+		elif opt == "-G":
+			name=arg
+			type="G"
+		elif opt == "-R":
+			showrooms=arg
+		elif opt == "-v":
+			verbose=True
+	
+	argSize = len(argv);	
+	logfile=argv[argSize-1]
+	validate()
+
+	if verbose == True:
+		print "html =", html, "token =" , token, "name =", name, "type=", type, \
+		"showrooms =", showrooms,  "verbose=", verbose,"log=", logfile
+	
+if __name__ == "__main__":
+	main(sys.argv[1:])	
