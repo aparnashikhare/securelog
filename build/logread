@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import sys,getopt,subprocess
+import sys,getopt,subprocess, os.path
 
 def logappend():
 	global html
