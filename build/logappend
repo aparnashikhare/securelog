@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import sys,getopt,subprocess
+import sys,getopt,subprocess, os.path
 
 def logappend():
 	global timestamp
@@ -11,13 +11,15 @@ def logappend():
 	global verbose
 	global batchfile
 	global logfile
+	global scriptpath
 	
 	options="java " 
 	
 	if verbose:
 		options +="-Ddebug=true "
-		
-	options +="-Xmx128m -classpath classes loghandler.LogAppender \"" 
+
+	classpath=scriptpath+"/classes"
+	options +="-Xmx128m -classpath " + classpath + " loghandler.LogAppender \"" 
 	
 	if logfile:
 		options+= "file=" + logfile 
@@ -123,4 +125,9 @@ def parseArgs(argv):
 	
 	
 if __name__ == "__main__":
+	global scriptpath
+	scriptpath="."
+	script=sys.argv[0];
+	scriptpath=os.path.abspath(os.path.join(script, os.pardir))
+
 	main(sys.argv[1:])	

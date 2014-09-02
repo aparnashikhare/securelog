@@ -11,13 +11,15 @@ def logappend():
 	global verbose
 	global logfile
 	global verbose 
+	global scriptpath
 	
 	options="java " 
 	
 	if verbose:
 		options +="-Ddebug=true "
-		
-	options +="-Xmx128m -classpath classes loghandler.LogReader \"" 
+
+	classpath=scriptpath+"/classes"
+	options +="-Xmx128m -classpath " + classpath + " loghandler.LogReader \"" 
 	
 	if token:
 		options+= "token=" + token
@@ -98,4 +100,9 @@ def parseArgs(argv):
 		"showrooms =", showrooms,  "verbose=", verbose,"log=", logfile, ", show = ", show
 	
 if __name__ == "__main__":
+	global scriptpath
+	scriptpath="."
+	script=sys.argv[0];
+	scriptpath=os.path.abspath(os.path.join(script, os.pardir))
+
 	main(sys.argv[1:])	
