@@ -114,7 +114,7 @@ public class LogAppender {
 		
 		if ("L".equals(inputs.get("action")) && inputs.get("room") == null) //should leav a room before leaving gallery
 		{
-		    String name = inputs.get("name");
+		    String name = inputs.get("visitor");
 		    Visitor visitor = data.getVisitors().getVisitor(name);
 		    if (visitor != null) {
 		        if (visitor.getState().getCurrentPlace().getId() != -1) {
@@ -136,16 +136,17 @@ public class LogAppender {
 						Util.showOutput("Invalid. Should enter a room before leaving room ");
 						return false;
 					}
-					else
+					/*else
 					{
 						VisitorState visitorState=visitor.getState();
 						int presRoomId=visitorState.getCurrentPlace().getId();
+						
 						if(presRoomId != Integer.parseInt(inputs.get("room")))
 						{
 							Util.showOutput("Invalid. Should enter a room before leaving room ");
 							return false;
 						}
-					}
+					}*/
 				}
 			}
 			
