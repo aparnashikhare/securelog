@@ -82,11 +82,15 @@ public class LogReader {
 			rooms.add("" + visitor.getState().getCurrentPlace().getId());
 		}
 
-		int i =0, size = rooms.size();
+		int i=0, size = rooms.size();
 		for (String r : rooms) {
 			i++;
-			System.out.print(r);
-			System.out.print((i<size) ? "," : "\n");
+			
+			if(Integer.parseInt(r) != -1)
+			{
+				System.out.print(r);
+				System.out.print((i<size) ? "," : "\n");
+			}
 		}
 	}
 	
@@ -152,11 +156,14 @@ public class LogReader {
 		
 		for (String room:rooms)
 		{
-			htmlOutput.append("<tr>").append(NewLine);
-			htmlOutput.append(FourSpaces).append("<td>");
-			htmlOutput.append(room);
-			htmlOutput.append("</td>").append(NewLine);
-			htmlOutput.append("</tr>").append(NewLine);
+			if(Integer.parseInt(room) != -1)
+			{
+				htmlOutput.append("<tr>").append(NewLine);
+				htmlOutput.append(FourSpaces).append("<td>");
+				htmlOutput.append(room);
+				htmlOutput.append("</td>").append(NewLine);
+				htmlOutput.append("</tr>").append(NewLine);
+			}
 		}
 		htmlOutput.append("</table> ").append(NewLine);
         htmlOutput.append("</body>").append(NewLine);
