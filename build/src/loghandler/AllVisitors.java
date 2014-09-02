@@ -53,4 +53,27 @@ public class AllVisitors  implements Serializable {
 		
 		return guests;
 	}
+
+	public AllVisitors deepCopy() {
+		
+		AllVisitors clone = new AllVisitors();
+		
+		for (Visitor visitor : visitors.values()) {
+			clone.getOrCreate(visitor.getName(), visitor.getType());
+		}
+		
+		return clone;
+	}
+	
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append(" Visitors : ");
+		for (Visitor v : visitors.values()) {
+			builder.append("{ ").append(v.getName()).append(".").append(v.getType())
+			.append("R-").append(v.getState().getCurrentPlace().getId()).append(" S:").append(v.getState().getState())
+			.append(" }");
+		}
+		
+		return builder.toString();
+	}
 }

@@ -16,9 +16,11 @@ public class LogReader {
 			throw new Exception("Invalid Input");
 
 		String input = a[0];
+		Util.debug("LogHandlermain.main() input : " + input);
 
 		if (input.indexOf(",") < 0) {
-			throw new Exception("Invalid Input");
+			Util.showOutput("Invalid");
+			System.exit(-1);
 		}
 
 		String[] inParts = input.split(",");
@@ -26,7 +28,8 @@ public class LogReader {
 
 		for (String part : inParts) {
 			if (part.indexOf("=") <= 0) {
-				throw new Exception("Invalid Input");
+				Util.showOutput("Invalid");
+				System.exit(-1);
 			}
 
 			inputs.put(part.split("=")[0], part.split("=")[1]);
@@ -61,7 +64,10 @@ public class LogReader {
 		        showTextData(inputs, data);
 		    
 		} else if (Util.isTrue(showRooms)) {
-			showRoomHistory(inputs, data);
+			 if (Util.isTrue(showHtml))
+				 showHtmlRooms(inputs,data);
+			 else
+				 showRoomHistory(inputs, data);
 		}
 	}
 
@@ -70,13 +76,17 @@ public class LogReader {
 		String name = inputs.get("name");
 		VisitorLog log = data.getLog();
 		Set<String> rooms = new LinkedHashSet<String>();
+
 		for (VisitorLogEntry entry : log.getLogs()) {
 			Visitor visitor = entry.getVisitors().getVisitor(name);
 			rooms.add("" + visitor.getState().getCurrentPlace().getId());
 		}
 
+		int i =0, size = rooms.size();
 		for (String r : rooms) {
-			System.out.println(r + ",");
+			i++;
+			System.out.print(r);
+			System.out.print((i<size) ? "," : "\n");
 		}
 	}
 	
@@ -122,7 +132,37 @@ public class LogReader {
         
         Util.showOutput(textOutput.toString());
 	}
-	
+	private static void showHtmlRooms(Map<String, String> inputs, LogData data)
+	{
+		String name = inputs.get("name");
+		VisitorLog log = data.getLog();
+		Set<String> rooms = new LinkedHashSet<String>();
+		for (VisitorLogEntry entry : log.getLogs()) {
+			Visitor visitor = entry.getVisitors().getVisitor(name);
+			rooms.add("" + visitor.getState().getCurrentPlace().getId());
+		}
+
+		StringBuilder htmlOutput = new StringBuilder();
+		htmlOutput.append("<html>").append(NewLine);
+		htmlOutput.append("<body>").append(NewLine);
+		htmlOutput.append("<table>").append(NewLine);
+		htmlOutput.append("<tr>").append(NewLine);
+		htmlOutput.append(FourSpaces).append("<th>Rooms</th>").append(NewLine);
+		htmlOutput.append("</tr>").append(NewLine);
+		
+		for (String room:rooms)
+		{
+			htmlOutput.append("<tr>").append(NewLine);
+			htmlOutput.append(FourSpaces).append("<td>");
+			htmlOutput.append(room);
+			htmlOutput.append("</td>").append(NewLine);
+			htmlOutput.append("</tr>").append(NewLine);
+		}
+		htmlOutput.append("</table> ").append(NewLine);
+        htmlOutput.append("</body>").append(NewLine);
+        htmlOutput.append("</html>").append(NewLine);
+        Util.showOutput(htmlOutput.toString());
+	}
 	private static void showAllData(Map<String, String> inputs, LogData data) {
 		AllVisitors visitors = data.getVisitors();
 		Map<String, Visitor> employees = visitors.getEmployees();
@@ -150,7 +190,7 @@ public class LogReader {
                           .append("</td>").append(NewLine);
             if (gIter.hasNext())
                 htmlOutput.append(FourSpaces)
-                          .append("<td>").append(eIter.next().getName())
+                          .append("<td>").append(gIter.next().getName())
                           .append("</td>").append(NewLine);
             
             htmlOutput.append("</tr>").append(NewLine);

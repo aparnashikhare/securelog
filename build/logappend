@@ -12,7 +12,7 @@ def logappend():
 	global batchfile
 	global logfile
 	
-	options="java -classpath classes loghandler.LogAppender \"" 
+	options="java -Ddebug=true -classpath classes loghandler.LogAppender \"" 
 	
 	if logfile:
 		options+= "file=" + logfile 

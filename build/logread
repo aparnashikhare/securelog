@@ -19,12 +19,12 @@ def logappend():
 		
 	options +="-Xmx128m -classpath classes loghandler.LogReader \"" 
 	
-	if html==True:
-		options+= "html=true" 
-	if show==True:
-		options+= ",show=true" 
 	if token:
-		options+= ",token=" + token
+		options+= "token=" + token
+	if html == True:
+		options+= ",html=true" 
+	if show == True:
+		options+= ",show=true" 
 	if name:
 		options+= ",name=" + name
 	if type:
@@ -35,7 +35,8 @@ def logappend():
 		options+= ",file=" + logfile
 			
 	options+="\""
-	subprocess.call(options, shell=True)
+	returnCode = subprocess.call(options, shell=True)
+	sys.exit(returnCode)
 	
 def main(argv):
 	parseArgs(argv)
@@ -94,7 +95,7 @@ def parseArgs(argv):
 
 	if verbose == True:
 		print "html =", html, "token =" , token, "name =", name, "type=", type, \
-		"showrooms =", showrooms,  "verbose=", verbose,"log=", logfile
+		"showrooms =", showrooms,  "verbose=", verbose,"log=", logfile, ", show = ", show
 	
 if __name__ == "__main__":
 	main(sys.argv[1:])	

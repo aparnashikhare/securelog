@@ -19,8 +19,44 @@ public class AllRooms  implements Serializable {
 		
 		return rooms.get(id);
 	}
-
+	
+	public Room getRoom(int id) {
+		return rooms.get(id);
+	}
+	
 	public Collection<Room> getRooms() {
 		return rooms.values();
+	}
+	
+	public Map<Integer, Room> getRoomsMap() {
+		return rooms;
+	}
+	
+	public AllRooms deepCopy() {
+		AllRooms clone = new AllRooms();
+		
+		for (Room room : this.rooms.values()) {
+			clone.getOrCreate(room.getId());
+		}
+		
+		return clone;
+	}
+	
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Rooms { ");
+		
+		for (Room r : this.rooms.values()) {
+			builder.append("R-").append(r.getId()).append(" (");
+			
+			for (Visitor v : r.getVisitors()) {
+				builder.append(v.getName()).append(".")
+				.append(v.getType()).append(",");
+			}
+			
+			builder.append(" ), ");
+		}
+		builder.append(" }");
+		return builder.toString();
 	}
 }

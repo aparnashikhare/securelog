@@ -39,8 +39,11 @@ public class Serializer {
 		try {
 			fileIs = new FileInputStream(file);
 			InputStream buffer = new BufferedInputStream(fileIs);
-			ObjectInput input = new ObjectInputStream (buffer);	
-			return (LogData) input.readObject();
+			ObjectInput input = new ObjectInputStream (buffer);
+			LogData fromFile = (LogData) input.readObject();
+			fromFile.deepCopy();
+			
+			return fromFile;
 		} catch (Exception e) {
 			Util.debug("Exception writing to " + file + ", e = " + e);
 			Util.showOutput("Integrity Error");

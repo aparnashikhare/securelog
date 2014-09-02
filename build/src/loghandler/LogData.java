@@ -48,4 +48,24 @@ public class LogData  implements Serializable {
 	public void setToken(String token) {
 		this.token = token;
 	}
+	
+	public void deepCopy() {
+		AllRooms tempRooms = rooms.deepCopy();
+		AllVisitors tempVisitors = visitors.deepCopy();
+		
+		for (Visitor v : visitors.getVisitors().values()) {
+			Room currentRoom = v.getState().getCurrentPlace();
+			
+			Room clonedRoom = tempRooms.getRoom(currentRoom.getId());
+			Visitor clonedVisitor = tempVisitors.getVisitor(v.getName());
+			
+			clonedVisitor.updateState(clonedRoom, v.getState().getState());
+			if (VisitorState.Arrived.equals(v.getState().getState())) {
+				clonedRoom.addVisitor(clonedVisitor);
+			}
+		}
+		
+		this.visitors = tempVisitors;
+		this.rooms = tempRooms;
+	}
 }
