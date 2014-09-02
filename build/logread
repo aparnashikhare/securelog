@@ -17,20 +17,20 @@ def logappend():
 	if verbose:
 		options +="-Ddebug=true "
 		
-	options +="-classpath classes loghandler.LogReader \"" 
+	options +="-Xmx128m -classpath classes loghandler.LogReader \"" 
 	
-	if html:
-		options+= "html=" + logfile 
+	if html==True:
+		options+= "html=true" 
 	if show==True:
-		options+= "show=true" 
+		options+= ",show=true" 
 	if token:
 		options+= ",token=" + token
 	if name:
 		options+= ",name=" + name
 	if type:
 		options+= ",type=" + type
-	if showrooms:
-		options+= ",showrooms=" + showrooms
+	if showrooms == True:
+		options+= ",showrooms=true"
 	if logfile:
 		options+= ",file=" + logfile
 			
@@ -65,14 +65,14 @@ def parseArgs(argv):
 	show=False
 	
 	try:
-		opts,args = getopt.getopt(argv, "vHS:K:E:G:R:")
+		opts,args = getopt.getopt(argv, "vHRSK:E:G:")
 	except getopt.GetoptError:
 		print "Usage: logread -K <token> [-H] -S <log>"
 		print "Usage: logread -K <token> [-H] -R (-E <name> | -G <name>) <log>"
 		
 	for opt, arg in opts:
 		if opt == "-H":
-			html=arg
+			html=True
 		elif opt == "-K":
 			token=arg
 		elif opt == "-S":
@@ -84,7 +84,7 @@ def parseArgs(argv):
 			name=arg
 			type="G"
 		elif opt == "-R":
-			showrooms=arg
+			showrooms=True
 		elif opt == "-v":
 			verbose=True
 	

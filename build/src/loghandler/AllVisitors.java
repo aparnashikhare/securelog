@@ -3,12 +3,13 @@ package loghandler;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class AllVisitors  implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-	private final Map<String, Visitor> visitors = new HashMap<String, Visitor>();
+	private final Map<String, Visitor> visitors = new TreeMap<String, Visitor>();
 
 	public void addVisitor(Visitor visitor) {
 		visitors.put(visitor.getName(), visitor);

@@ -55,7 +55,7 @@ public class LogReader {
 
 		if (Util.isTrue(show)) {
 		    
-		    if (Util.isTrue(inputs.get("html")))
+		    if (Util.isTrue(showHtml))
 		        showAllData(inputs, data);
 		    else 
 		        showTextData(inputs, data);
@@ -154,7 +154,8 @@ public class LogReader {
                           .append("</td>").append(NewLine);
             
             htmlOutput.append("</tr>").append(NewLine);
-			done = !eIter.hasNext() && gIter.hasNext(); 
+            
+            done = !eIter.hasNext() && !gIter.hasNext(); 
 		}
 		
         htmlOutput.append("</table>").append(NewLine);
@@ -197,8 +198,50 @@ public class LogReader {
 	    
 	    if (!data.getToken().equals(inputs.get("token"))) {
             Util.showOutput("Invalid token");
-	        return false;
+	        System.exit(-1);
 	    }
+	    if (Util.isTrue(inputs.get("show")))
+	    {
+	    	if(Util.isTrue(inputs.get("showrooms")))
+	    	{
+	    		 Util.showOutput("Invalid ");
+	 	        return false;
+	    	}
+	    }
+	    if (Util.isTrue(inputs.get("showrooms")))
+	    {
+	    	if(Util.isTrue(inputs.get("show")))
+	    	{
+	    		 Util.showOutput("Invalid ");
+	 	        return false;
+	    	}
+	    	if(inputs.get("type") !=null)
+	    	{
+	    		
+	    		if(!"E".equals(inputs.get("type")) &&  !"G".equals(inputs.get("type")))
+		    	{
+		    		 Util.showOutput("Invalid ");
+		 	        return false;
+		    	}
+	    	}
+	    	else
+	    	{
+	    		 Util.showOutput("Invalid ");
+		 	        return false;
+	    	}
+	    	if(inputs.get("name")== null)
+	    	{
+	    		 Util.showOutput("Invalid ");
+		 	        return false;
+	    	}
+	    
+	    }
+	    if(inputs.get("file")==null)
+	    {
+	    	 Util.showOutput("Invalid ");
+	 	        return false;
+	    }
+	    
 	    
 		return true;
 	}
