@@ -62,4 +62,25 @@ public class VisitorLog  implements Serializable {
 		
 		return returnLogs;
 	}
+	
+	public int getTotalTimeSpent(String name) {
+		
+		int end=logs.get(logs.size()-1).getTime();
+		int start = -1;
+		
+		for (VisitorLogEntry entry : logs) {
+			Visitor v = entry.getVisitors().getVisitor(name);
+			
+			if( start < 0 && v != null ) {
+				if (v.getState().arrivedAtGallery()) {
+					start = entry.getTime();
+				}
+			} else if (start >= 0 && v == null) {
+				end = entry.getTime();
+				break;
+			}
+		}
+		
+		return end-start;
+	}
 }

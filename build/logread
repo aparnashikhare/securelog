@@ -26,7 +26,9 @@ def logappend():
 	if html == True:
 		options+= ",html=true" 
 	if show == True:
-		options+= ",show=true" 
+		options+= ",show=true"
+	if timespent == True:
+		options += ",timespent=true" 
 	if name:
 		options+= ",name=" + name
 	if type:
@@ -56,6 +58,7 @@ def parseArgs(argv):
 	global name
 	global verbose
 	global logfile
+	global timespent
 	
 	verbose=False
 	html=False
@@ -66,9 +69,10 @@ def parseArgs(argv):
 	showrooms=False
 	logfile=None
 	show=False
+	timespent=False
 	
 	try:
-		opts,args = getopt.getopt(argv, "vHRSK:E:G:")
+		opts,args = getopt.getopt(argv, "vHRTSK:E:G:")
 	except getopt.GetoptError:
 		print "Usage: logread -K <token> [-H] -S <log>"
 		print "Usage: logread -K <token> [-H] -R (-E <name> | -G <name>) <log>"
@@ -88,6 +92,8 @@ def parseArgs(argv):
 			type="G"
 		elif opt == "-R":
 			showrooms=True
+		elif opt == "-T":
+			timespent=True
 		elif opt == "-v":
 			verbose=True
 	

@@ -1,5 +1,6 @@
 package loghandler;
 
+import java.io.ObjectInputStream.GetField;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -55,6 +56,7 @@ public class LogReader {
 		String type = inputs.get("type");
 		String file = inputs.get("file");
 		String token = inputs.get("token");
+		String timespent = inputs.get("timespent");
 
 		if (Util.isTrue(show)) {
 		    
@@ -68,6 +70,12 @@ public class LogReader {
 				 showHtmlRooms(inputs,data);
 			 else
 				 showRoomHistory(inputs, data);
+		} else if (Util.isTrue(timespent)) {
+			
+			int timeSpentValue = data.getLog().getTotalTimeSpent(name);
+			
+			if (timeSpentValue > 0)
+				Util.showOutput(""+timeSpentValue);
 		}
 	}
 

@@ -121,13 +121,12 @@ public class LogAppender {
 			}
 		}
 		
-		if ("L".equals(inputs.get("action")) && inputs.get("room") == null) //should leav a room before leaving gallery
-		{
+		if ("L".equals(inputs.get("action")) && inputs.get("room") == null) { //should leav a room before leaving gallery
+		
 		    String name = inputs.get("visitor");
 		    Visitor visitor = data.getVisitors().getVisitor(name);
+
 		    if (visitor != null) {
-		    	//Util.showOutput("visitor.getState().getCurrentPlace().getId():"+visitor.getState().getCurrentPlace().getId());
-		       // if (visitor.getState().getCurrentPlace().getId() != -1) {
 		    	if (!"L".equals(visitor.getState().getState()) && visitor.getState().getCurrentPlace().getId() != -1) {
 					Util.showOutput("invalid");
 	                Util.debug("Invalid. Should leave a room before leaving the gallery ");
@@ -135,35 +134,23 @@ public class LogAppender {
 		        }
 		    }
 		}
-		if("L".equals(inputs.get("action")) && inputs.get("room") != null)
-		{
+		if("L".equals(inputs.get("action")) && inputs.get("room") != null) {
 			
 			AllVisitors allVisitors=data.getVisitors();
 			if (allVisitors !=null) {
 				Visitor visitor=allVisitors.getVisitor(inputs.get("visitor"));
-				if(visitor!=null)
-				{
-					if(!"A".equals(visitor.getState().getState() ))
-					{
+				
+				if(visitor!=null) {
+					if(!"A".equals(visitor.getState().getState() )) {
 						Util.showOutput("invalid");
 						Util.debug("Invalid. Should enter a room before leaving room ");
 						return false;
 					}
-					/*else
-					{
-						VisitorState visitorState=visitor.getState();
-						int presRoomId=visitorState.getCurrentPlace().getId();
-						
-						if(presRoomId != Integer.parseInt(inputs.get("room")))
-						{
-							Util.showOutput("Invalid. Should enter a room before leaving room ");
-							return false;
-						}
-					}*/
 				}
 			}
 			
 		}
+		
 		return true;
 	}
 
@@ -183,15 +170,14 @@ public class LogAppender {
 		if ("A".equals(action)) {
 			roomRef.addVisitor(visitor);
 			visitor.updateState(roomRef, VisitorState.Arrived);
+			
 		} else if ("L".equals(action)) {
-			if(roomId ==-1)
-			{
+			
+			if(roomId ==-1) {
 				roomRef.removeVisitor(visitor);
 				data.getVisitors().removeVisitor(name);
 				
-			}
-			else
-			{
+			} else {
 				roomRef.removeVisitor(visitor);
 				visitor.updateState(roomRef, VisitorState.Left);
 			}

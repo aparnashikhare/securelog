@@ -24,4 +24,8 @@ public class VisitorState  implements Serializable {
 	public void setState(String state) {
 		this.state = state;
 	}
+	
+	public boolean arrivedAtGallery() {
+		return this.currentPlace.getId() == -1 && Arrived.equals(state); 
+	}
 }
