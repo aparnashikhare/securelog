@@ -117,13 +117,15 @@ public class LogAppender {
 		    String name = inputs.get("visitor");
 		    Visitor visitor = data.getVisitors().getVisitor(name);
 		    if (visitor != null) {
-		        if (visitor.getState().getCurrentPlace().getId() != -1) {
+		    	//Util.showOutput("visitor.getState().getCurrentPlace().getId():"+visitor.getState().getCurrentPlace().getId());
+		       // if (visitor.getState().getCurrentPlace().getId() != -1) {
+		    	if (!"L".equals(visitor.getState().getState()) && visitor.getState().getCurrentPlace().getId() != -1) {
 	                Util.showOutput("Invalid. Should leave a room before leaving the gallery ");
 		            return false;
 		        }
 		    }
 		}
-		if("L".equals(inputs.get("action")))
+		if("L".equals(inputs.get("action")) && inputs.get("room") != null)
 		{
 			
 			AllVisitors allVisitors=data.getVisitors();
@@ -171,8 +173,17 @@ public class LogAppender {
 			roomRef.addVisitor(visitor);
 			visitor.updateState(roomRef, VisitorState.Arrived);
 		} else if ("L".equals(action)) {
-			roomRef.removeVisitor(visitor);
-			visitor.updateState(roomRef, VisitorState.Left);
+			if(roomId ==-1)
+			{
+				roomRef.removeVisitor(visitor);
+				data.getVisitors().removeVisitor(name);
+				
+			}
+			else
+			{
+				roomRef.removeVisitor(visitor);
+				visitor.updateState(roomRef, VisitorState.Left);
+			}
 		}
 		
 		data.getLog().addEntry(time, data.getRooms(), data.getVisitors());

@@ -3,12 +3,13 @@ package loghandler;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class Room implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	private int id;
-	private final Set<Visitor> visitors = new HashSet<Visitor>();
+	private final Set<Visitor> visitors = new TreeSet<Visitor>();
 	
 	public Room(int id) {
 		this.id = id;

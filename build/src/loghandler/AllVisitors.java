@@ -25,13 +25,16 @@ public class AllVisitors  implements Serializable {
 	public Visitor getVisitor(String name) {
 		return visitors.get(name);
 	}
-
+	public Visitor removeVisitor(String name) {
+		return visitors.remove(name);
+	}
+	
 	public Map<String, Visitor> getVisitors() {
 		return visitors;
 	}
 	
 	public Map<String, Visitor> getEmployees() {
-		Map<String, Visitor> employees = new HashMap<String, Visitor>();
+		Map<String, Visitor> employees = new TreeMap<String, Visitor>();
 		
 		for (Visitor v : visitors.values()) {
 			if (v.isEmployee()) {
@@ -43,7 +46,7 @@ public class AllVisitors  implements Serializable {
 	}
 
 	public Map<String, Visitor> getGuests() {
-		Map<String, Visitor> guests = new HashMap<String, Visitor>();
+		Map<String, Visitor> guests = new TreeMap<String, Visitor>();
 		
 		for (Visitor v : visitors.values()) {
 			if (v.isGuest()) {

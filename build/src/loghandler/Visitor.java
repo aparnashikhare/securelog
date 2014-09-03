@@ -2,7 +2,7 @@ package loghandler;
 
 import java.io.Serializable;
 
-public class Visitor implements Serializable {
+public class Visitor implements Serializable ,Comparable<Visitor>{
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -56,5 +56,12 @@ public class Visitor implements Serializable {
 	
 	public String toString() {
 		return name + "(" + type +")";
+	}
+
+	@Override
+	public int compareTo(Visitor o) {
+		// TODO Auto-generated method stub
+		return this.name.compareTo(o.name);
+		
 	}
 }

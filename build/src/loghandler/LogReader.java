@@ -76,9 +76,13 @@ public class LogReader {
 		String name = inputs.get("name");
 		VisitorLog log = data.getLog();
 		Set<String> rooms = new LinkedHashSet<String>();
-
+		System.out.println("log size:"+log.getLogs().size());
 		for (VisitorLogEntry entry : log.getLogs()) {
+			System.out.println("VisitorLogEntry :"+entry == null);
+			System.out.println(name);
 			Visitor visitor = entry.getVisitors().getVisitor(name);
+			System.out.println("visitor entry.getVisitors() :"+entry.getVisitors() ==null);
+			System.out.println("visitor :"+visitor);
 			rooms.add("" + visitor.getState().getCurrentPlace().getId());
 		}
 
@@ -109,6 +113,9 @@ public class LogReader {
 		    textOutput.append((i < size) ? "," : "\n");
 		}
 		
+		if (guests.values().size() == 0){
+			textOutput.append("\n");
+		}
 		i = 0; size = guests.values().size();
 		for(Visitor g : guests.values()) {
 		    i++;
@@ -117,10 +124,10 @@ public class LogReader {
 		}
 		
         for (Room room : roomList) {
-            if (room.getId() == -1)
+            if (room.getId() == -1 || room.getVisitors().size() ==0)
                 continue;
             
-            textOutput.append(room.getId() + " : ");
+            textOutput.append(room.getId() + ": ");
             
             i = 0; size = room.getVisitors().size();
             for (Visitor v : room.getVisitors()) {
