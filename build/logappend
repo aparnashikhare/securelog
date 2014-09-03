@@ -12,6 +12,7 @@ def logappend():
 	global batchfile
 	global logfile
 	global scriptpath
+	retCode=0
 	
 	options="java " 
 	
@@ -36,7 +37,8 @@ def logappend():
 	if room:
 		options+= ",room=" + room
 	options+="\""
-	subprocess.call(options, shell=True)
+	retCode = subprocess.call(options, shell=True)
+	sys.exit(retCode);
 	
 def batchappend(batchfile):
 	try:

@@ -25,7 +25,8 @@ public class VisitorLog  implements Serializable {
 		if (logs.size() > 0) {
 			VisitorLogEntry entry = logs.get(logs.size()-1);
 			if (entry.getTime() > timestamp) {
-				Util.showOutput("Invalid");
+				Util.showOutput("invalid");
+				Util.debug("Invalid Timestamp");
 			} else {
 				logs.add(new VisitorLogEntry(timestamp, rooms, visitors));
 			}

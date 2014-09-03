@@ -1,13 +1,8 @@
 package loghandler;
 
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 public class LogAppender {
@@ -41,7 +36,13 @@ public class LogAppender {
 	private static void handleData(Map<String, String> inputs) {
 		LogData data = Util.getLogData(inputs);
 		
-		if (data != null && validate(inputs, data)) {
+		boolean valid = validate(inputs, data);
+		
+		if (!valid) {
+			System.exit(-1);
+		}
+		
+		if (data != null) {
 			handleAction(data, inputs);
 			Serializer.write(inputs.get("file"), data);
 		}
@@ -55,32 +56,38 @@ public class LogAppender {
 		List<VisitorLogEntry> logs= data.getLog().getLogs();
 		if(inputs.get("time") == null || (logs.size() >0 && logs.get(logs.size()-1).getTime() > Integer.parseInt(inputs.get("time"))))
 		{
-			Util.showOutput("Invalid timestamp");
+			Util.showOutput("invalid");
+			Util.debug("Invalid timestamp");
 			return false;
 		}
 		if(inputs.get("visitor")== null || !Util.isAlpha(inputs.get("visitor")))
 		{
-			Util.showOutput("Invalid visitor name");
+			Util.showOutput("invalid");
+			Util.debug("Invalid visitor name");
 			return false;
 		}
 		if(inputs.get("room")!= null && !Util.isNumeric(inputs.get("room")) )
 		{
-            Util.showOutput("Invalid room id");
+			Util.showOutput("invalid");
+            Util.debug("Invalid room id");
             return false;
 		}
 		if(inputs.get("file")== null || !Util.isAlphaNum(inputs.get("file")))
 		{
-			Util.showOutput("Invalid log path");
+			Util.showOutput("invalid");
+			Util.debug("Invalid log path");
 			return false;
 		}
 		if(inputs.get("action")== null || inputs.get("type")== null)
 		{
-			Util.showOutput("Should specify action(L/A) , type(E,G) ");
+			Util.showOutput("invalid");
+			Util.debug("Should specify action(L/A) , type(E,G) ");
 			return false;
 		}
 		if( !"A".equals(inputs.get("action")) && !"L".equals(inputs.get("action")) && !"E".equals(inputs.get("type")) && !"G".equals(inputs.get("type")))
 		{
-			Util.showOutput("Should specify action(L/A) , type(E,G) ");
+			Util.showOutput("invalid");
+			Util.debug("Should specify action(L/A) , type(E,G) ");
 			return false;
 		}
 		if ("A".equals(inputs.get("action")) && inputs.get("room") != null)  //Should enter a gallery before entering a room
@@ -88,7 +95,8 @@ public class LogAppender {
 		    
 		    if (data.getVisitors().getVisitor(inputs.get("visitor")) == null 
 		            && Integer.parseInt(inputs.get("room")) != -1) {
-                Util.showOutput("Invalid. Should enter the gallery before entering room ");
+		    	Util.showOutput("invalid");
+                Util.debug("Invalid. Should enter the gallery before entering room ");
 		        return false;
 		    }
 		}
@@ -104,7 +112,8 @@ public class LogAppender {
 					{
 						if(!"L".equals(visitor.getState().getState() ))
 						{
-							Util.showOutput("Invalid. Should leave a room before entering room ");
+							Util.showOutput("invalid");
+							Util.debug("Invalid. Should leave a room before entering room ");
 							return false;
 						}
 					}
@@ -120,7 +129,8 @@ public class LogAppender {
 		    	//Util.showOutput("visitor.getState().getCurrentPlace().getId():"+visitor.getState().getCurrentPlace().getId());
 		       // if (visitor.getState().getCurrentPlace().getId() != -1) {
 		    	if (!"L".equals(visitor.getState().getState()) && visitor.getState().getCurrentPlace().getId() != -1) {
-	                Util.showOutput("Invalid. Should leave a room before leaving the gallery ");
+					Util.showOutput("invalid");
+	                Util.debug("Invalid. Should leave a room before leaving the gallery ");
 		            return false;
 		        }
 		    }
@@ -135,7 +145,8 @@ public class LogAppender {
 				{
 					if(!"A".equals(visitor.getState().getState() ))
 					{
-						Util.showOutput("Invalid. Should enter a room before leaving room ");
+						Util.showOutput("invalid");
+						Util.debug("Invalid. Should enter a room before leaving room ");
 						return false;
 					}
 					/*else

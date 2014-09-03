@@ -15,10 +15,6 @@ public class VisitorLogEntry  implements Serializable {
 		this.time = time;
 		this.rooms = rooms;
 		this.visitors = visitors;
-		
-		Util.debug("created entry with " + this.rooms.hashCode() + " and " + this.visitors.hashCode());
-		Util.debug("created entry with " + this.rooms);
-		Util.debug("created entry with " + this.visitors);
 	}
 	
 	public int getTime() {
