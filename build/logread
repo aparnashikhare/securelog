@@ -13,10 +13,11 @@ def logappend():
 	global verbose 
 	global scriptpath
 	global empRoomHistory
-	global lowerBound
-	global upperBound
 	global x
 	global y
+	global xexclude
+	global yexclude
+	global exclusivebound
 	
 	options="java " 
 	
@@ -42,14 +43,16 @@ def logappend():
 		options+= ",showrooms=true"
 	if empRoomHistory == True:
 		options+= ",empRoomHistory=true"	
-	if lowerBound == True:
-		options+= ",lowerBound=true"
-	if upperBound == True:
-		options+= ",upperBound=true"
 	if x:
 		options+= ",x=" + x
 	if y:
 		options+= ",y=" + y
+	if xexclude:
+		options+= ",xexclude=" + xexclude
+	if yexclude:
+		options+= ",yexclude=" + yexclude
+	if exclusivebound == True:
+		options+= ",exclusivebound=true"
 	if logfile:
 		options+= ",file=" + logfile
 			
@@ -75,10 +78,11 @@ def parseArgs(argv):
 	global logfile
 	global timespent
 	global empRoomHistory
-	global lowerBound
-	global upperBound
 	global x
 	global y
+	global xexclude
+	global yexclude
+	global exclusivebound
 	
 	verbose=False
 	html=False
@@ -91,13 +95,14 @@ def parseArgs(argv):
 	show=False
 	timespent=False
 	empRoomHistory=False
-	lowerBound=False
-	upperBound=False
 	x=None
 	y=None
+	xexclude=None
+	yexclude=None
+	exclusivebound=False
 	
 	try:
-		opts,args = getopt.getopt(argv, "vHRTSAK:E:G:L:U:")
+		opts,args = getopt.getopt(argv, "vHRTSABK:E:G:L:U:")
 	except getopt.GetoptError:
 		print "Usage: logread -K <token> [-H] -S <log>"
 		print "Usage: logread -K <token> [-H] -R (-E <name> | -G <name>) <log>"
@@ -121,12 +126,18 @@ def parseArgs(argv):
 			timespent=True
 		elif opt == "-A":
 			empRoomHistory=True
+		elif opt == "-B":
+			exclusivebound=True
 		elif opt == "-L":
-			x=arg
-			lowerBound=True
+			if x is None:
+				x=arg
+			else: 
+				xexclude=arg
 		elif opt == "-U":
-			y=arg
-			upperBound=True
+			if y is None:
+				y=arg
+			else: 
+				yexclude=arg
 		elif opt == "-v":
 			verbose=True
 			

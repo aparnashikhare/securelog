@@ -62,7 +62,8 @@ public class LogReader {
 		String token = inputs.get("token");
 		String timespent = inputs.get("timespent");
 		String empRoomList=inputs.get("empRoomHistory");
-
+		String exclusivebound=inputs.get("exclusivebound");
+		
 		if (Util.isTrue(show)) {
 		    
 		    if (Util.isTrue(showHtml))
@@ -86,6 +87,11 @@ public class LogReader {
 				 showHtmlEmployeeHistory(inputs,data);
 			 else
 				 showEmployeeHistory(inputs, data);
+		}else if (Util.isTrue(exclusivebound)) {
+			 if (Util.isTrue(showHtml))
+				 showHtmlExclusiveBounds(inputs,data);
+			 else
+				 showExclusiveBounds(inputs, data);
 		}
 	}
 
@@ -136,6 +142,89 @@ public class LogReader {
 			System.out.print(name);
 			System.out.print(i<size ? ",":"\n");
 		}
+	}
+	private static void showExclusiveBounds(Map<String, String> inputs, LogData data)
+	{
+		int startTime=Integer.parseInt(inputs.get("x"));
+		int endTime=Integer.parseInt(inputs.get("y"));
+		int xstartTime=Integer.parseInt(inputs.get("xexclude"));
+		int xendTime=Integer.parseInt(inputs.get("yexclude"));
+		
+		List<VisitorLogEntry> logs=data.getLog().getLogs(startTime, endTime);
+		int i=0;
+		Set<String> names = new TreeSet<String>();
+		for (VisitorLogEntry visEntry :logs)
+		{
+			Map<String,Visitor> employees=visEntry.getVisitors().getEmployees();
+			if (employees.size() > 0)
+				names.addAll(employees.keySet());
+		}
+		List<VisitorLogEntry> xlogs=data.getLog().getLogs(xstartTime, xendTime);
+		Set<String> xnames = new TreeSet<String>();
+		for (VisitorLogEntry visEntry :xlogs)
+		{
+			Map<String,Visitor> employees=visEntry.getVisitors().getEmployees();
+			if (employees.size() > 0)
+				xnames.addAll(employees.keySet());
+		}
+		
+		names.removeAll(xnames);
+		int size = names.size();
+		
+		for (String name : names) 
+		{
+			i++;
+			System.out.print(name);
+			System.out.print(i<size ? ",":"\n");
+		}
+	}
+	private static void showHtmlExclusiveBounds(Map<String, String> inputs, LogData data)
+	{
+		int startTime=Integer.parseInt(inputs.get("x"));
+		int endTime=Integer.parseInt(inputs.get("y"));
+		int xstartTime=Integer.parseInt(inputs.get("xexclude"));
+		int xendTime=Integer.parseInt(inputs.get("yexclude"));
+		
+		List<VisitorLogEntry> logs=data.getLog().getLogs(startTime, endTime);
+		
+		Set<String> names = new TreeSet<String>();
+		for (VisitorLogEntry visEntry :logs)
+		{
+			Map<String,Visitor> employees=visEntry.getVisitors().getEmployees();
+			if (employees.size() > 0)
+				names.addAll(employees.keySet());
+		}
+		List<VisitorLogEntry> xlogs=data.getLog().getLogs(xstartTime, xendTime);
+		Set<String> xnames = new TreeSet<String>();
+		for (VisitorLogEntry visEntry :xlogs)
+		{
+			Map<String,Visitor> employees=visEntry.getVisitors().getEmployees();
+			if (employees.size() > 0)
+				xnames.addAll(employees.keySet());
+		}
+		
+		names.removeAll(xnames);
+		
+		StringBuilder htmlOutput = new StringBuilder();
+		htmlOutput.append("<html>").append(NewLine1);
+		htmlOutput.append("<body>").append(NewLine1);
+		htmlOutput.append("<table>").append(NewLine1);
+		htmlOutput.append("<tr>").append(NewLine1);
+		htmlOutput.append(FourSpaces1).append("<th>Employees</th>").append(NewLine1);
+		htmlOutput.append("</tr>").append(NewLine1);
+		for (String name : names) 
+		{
+			htmlOutput.append("<tr>").append(NewLine1);
+			htmlOutput.append(FourSpaces1).append("<td>");
+			htmlOutput.append(name);
+			htmlOutput.append("</td>").append(NewLine1);
+			htmlOutput.append("</tr>").append(NewLine);
+			
+		}
+		htmlOutput.append("</table>").append(NewLine1);
+        htmlOutput.append("</body>").append(NewLine1);
+        htmlOutput.append("</html>").append(NewLine1);
+        Util.showOutput(htmlOutput.toString());
 	}
 	private static void showHtmlEmployeeHistory(Map<String, String> inputs, LogData data)
 	{
