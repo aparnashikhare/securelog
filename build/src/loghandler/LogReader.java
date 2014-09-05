@@ -320,7 +320,9 @@ public class LogReader {
 		Set<String> rooms = new LinkedHashSet<String>();
 		for (VisitorLogEntry entry : log.getLogs()) {
 			Visitor visitor = entry.getVisitors().getVisitor(name);
-			rooms.add("" + visitor.getState().getCurrentPlace().getId());
+			if (visitor != null) {
+				rooms.add("" + visitor.getState().getCurrentPlace().getId());
+			}
 		}
 
 		StringBuilder htmlOutput = new StringBuilder();
