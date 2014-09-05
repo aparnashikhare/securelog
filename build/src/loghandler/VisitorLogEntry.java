@@ -28,4 +28,5 @@ public class VisitorLogEntry  implements Serializable {
 	public AllVisitors getVisitors() {
 		return visitors;
 	}
+	
 }

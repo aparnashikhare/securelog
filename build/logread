@@ -12,6 +12,11 @@ def logappend():
 	global logfile
 	global verbose 
 	global scriptpath
+	global empRoomHistory
+	global lowerBound
+	global upperBound
+	global x
+	global y
 	
 	options="java " 
 	
@@ -35,6 +40,16 @@ def logappend():
 		options+= ",type=" + type
 	if showrooms == True:
 		options+= ",showrooms=true"
+	if empRoomHistory == True:
+		options+= ",empRoomHistory=true"	
+	if lowerBound == True:
+		options+= ",lowerBound=true"
+	if upperBound == True:
+		options+= ",upperBound=true"
+	if x:
+		options+= ",x=" + x
+	if y:
+		options+= ",y=" + y
 	if logfile:
 		options+= ",file=" + logfile
 			
@@ -59,6 +74,11 @@ def parseArgs(argv):
 	global verbose
 	global logfile
 	global timespent
+	global empRoomHistory
+	global lowerBound
+	global upperBound
+	global x
+	global y
 	
 	verbose=False
 	html=False
@@ -70,9 +90,14 @@ def parseArgs(argv):
 	logfile=None
 	show=False
 	timespent=False
+	empRoomHistory=False
+	lowerBound=False
+	upperBound=False
+	x=None
+	y=None
 	
 	try:
-		opts,args = getopt.getopt(argv, "vHRTSK:E:G:")
+		opts,args = getopt.getopt(argv, "vHRTSAK:E:G:L:U:")
 	except getopt.GetoptError:
 		print "Usage: logread -K <token> [-H] -S <log>"
 		print "Usage: logread -K <token> [-H] -R (-E <name> | -G <name>) <log>"
@@ -94,8 +119,17 @@ def parseArgs(argv):
 			showrooms=True
 		elif opt == "-T":
 			timespent=True
+		elif opt == "-A":
+			empRoomHistory=True
+		elif opt == "-L":
+			x=arg
+			lowerBound=True
+		elif opt == "-U":
+			y=arg
+			upperBound=True
 		elif opt == "-v":
 			verbose=True
+			
 	
 	argSize = len(argv);	
 	logfile=argv[argSize-1]

@@ -1,16 +1,19 @@
 package loghandler;
 
-import java.io.ObjectInputStream.GetField;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class LogReader {
 	private static final String FourSpaces = "    ";
 	private static final String NewLine = "\n";
+	private static final String NewLine1 = "";
+	private static final String FourSpaces1 = "";
 	
 	public static void main(String... a) throws Exception {
 		if (a == null || a.length == 0)
@@ -47,6 +50,7 @@ public class LogReader {
 			showResult(inputs, data);
 		}
 	}
+	
 
 	private static void showResult(Map<String, String> inputs, LogData data) {
 		String show = inputs.get("show");
@@ -57,6 +61,7 @@ public class LogReader {
 		String file = inputs.get("file");
 		String token = inputs.get("token");
 		String timespent = inputs.get("timespent");
+		String empRoomList=inputs.get("empRoomHistory");
 
 		if (Util.isTrue(show)) {
 		    
@@ -76,6 +81,11 @@ public class LogReader {
 			
 			if (timeSpentValue > 0)
 				Util.showOutput(""+timeSpentValue);
+		}else if (Util.isTrue(empRoomList)) {
+			 if (Util.isTrue(showHtml))
+				 showHtmlEmployeeHistory(inputs,data);
+			 else
+				 showEmployeeHistory(inputs, data);
 		}
 	}
 
@@ -103,7 +113,68 @@ public class LogReader {
 			}
 		}
 	}
+	private static void showEmployeeHistory(Map<String, String> inputs, LogData data)
+	{
+		int startTime=Integer.parseInt(inputs.get("x"));
+		int endTime=Integer.parseInt(inputs.get("y"));
+		
+		List<VisitorLogEntry> logs=data.getLog().getLogs(startTime, endTime);
+		int i=0;
+		Set<String> names = new TreeSet<String>();
+		for (VisitorLogEntry visEntry :logs)
+		{
+			Map<String,Visitor> employees=visEntry.getVisitors().getEmployees();
+			if (employees.size() > 0)
+				names.addAll(employees.keySet());
+		}
+		
+		int size = names.size();
+		
+		for (String name : names) 
+		{
+			i++;
+			System.out.print(name);
+			System.out.print(i<size ? ",":"\n");
+		}
+	}
+	private static void showHtmlEmployeeHistory(Map<String, String> inputs, LogData data)
+	{
+		int startTime=Integer.parseInt(inputs.get("x"));
+		int endTime=Integer.parseInt(inputs.get("y"));
+		
+		List<VisitorLogEntry> logs=data.getLog().getLogs(startTime, endTime);
 	
+		Set<String> names = new TreeSet<String>();
+		for (VisitorLogEntry visEntry :logs)
+		{
+			Map<String,Visitor> employees=visEntry.getVisitors().getEmployees();
+			if (employees.size() > 0)
+				names.addAll(employees.keySet());
+		}
+		
+		
+		StringBuilder htmlOutput = new StringBuilder();
+		htmlOutput.append("<html>").append(NewLine1);
+		htmlOutput.append("<body>").append(NewLine1);
+		htmlOutput.append("<table>").append(NewLine1);
+		htmlOutput.append("<tr>").append(NewLine1);
+		htmlOutput.append(FourSpaces1).append("<th>Employees</th>").append(NewLine1);
+		htmlOutput.append("</tr>").append(NewLine1);
+		for (String name : names) 
+		{
+		
+			htmlOutput.append("<tr>").append(NewLine1);
+			htmlOutput.append(FourSpaces1).append("<td>");
+			htmlOutput.append(name);
+			htmlOutput.append("</td>").append(NewLine1);
+			htmlOutput.append("</tr>").append(NewLine);
+			
+		}
+		htmlOutput.append("</table>").append(NewLine1);
+        htmlOutput.append("</body>").append(NewLine1);
+        htmlOutput.append("</html>").append(NewLine1);
+        Util.showOutput(htmlOutput.toString());
+	}
 	private static void showTextData(Map<String, String> inputs, LogData data) {
 		AllVisitors visitors = data.getVisitors();
 		Map<String, Visitor> employees = visitors.getEmployees();

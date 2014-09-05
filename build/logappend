@@ -12,6 +12,8 @@ def logappend():
 	global batchfile
 	global logfile
 	global scriptpath
+	global batchmode
+	
 	retCode=0
 	
 	options="java " 
@@ -38,18 +40,26 @@ def logappend():
 		options+= ",room=" + room
 	options+="\""
 	retCode = subprocess.call(options, shell=True)
-	sys.exit(retCode);
+	
+	if batchmode == False:
+		sys.exit(retCode);
+		
 	
 def batchappend(batchfile):
+	global batchmode
+	batchmode=False
+	
 	try:
 		f = open(batchfile, 'r')
+		batchmode=True
 		for line in f:
 			batchOptions = line.split()
-			
 			if verbose:
 				print "batchoptions :", batchOptions
-				
 			main(batchOptions)
+		
+		if verbose:
+			print "processing ", batchfile, "complete"
 	except IOError:
 		print "Invalid file name", fileName
 	
@@ -127,6 +137,9 @@ def parseArgs(argv):
 	
 	
 if __name__ == "__main__":
+	global batchmode
+	batchmode = False
+	
 	global scriptpath
 	scriptpath="."
 	script=sys.argv[0];
